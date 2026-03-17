@@ -223,7 +223,7 @@ export default function TestTakingPage({ params }: Props) {
   }
 
   return (
-    <div className="h-screen overflow-hidden">
+    <div className="h-[100dvh] overflow-hidden">
       <Modal
         isOpen={submitOpen}
         title="Submit test?"
@@ -239,9 +239,9 @@ export default function TestTakingPage({ params }: Props) {
         danger
       />
 
-      <div className="flex h-full flex-col md:flex-row">
-        <aside className="bg-dark bg-dark-glow text-white md:w-[30%]">
-          <div className="flex h-full flex-col p-6">
+      <div className="flex h-full min-h-0 flex-col md:flex-row">
+        <aside className="bg-dark bg-dark-glow text-white md:w-[30%] md:shrink-0 max-h-[44dvh] overflow-y-auto md:max-h-none md:overflow-y-visible">
+          <div className="flex h-full min-h-0 flex-col p-6">
             <div>
               <div className="font-serif text-2xl leading-tight text-white">{test.title}</div>
               <div className="mt-4">
@@ -254,7 +254,7 @@ export default function TestTakingPage({ params }: Props) {
               </div>
             </div>
 
-            <div className="mt-8">
+            <div className="mt-8 min-h-0 flex-1">
               <div className="mb-3 text-xs uppercase tracking-widest text-white/60">Questions</div>
               <div className="grid grid-cols-5 gap-2">
                 {test.questions.map((q, idx) => {
@@ -304,8 +304,8 @@ export default function TestTakingPage({ params }: Props) {
           </div>
         </aside>
 
-        <section className="flex-1 bg-cream">
-          <div className="flex h-full flex-col px-5 py-6 md:px-10 md:py-10">
+        <section className="flex-1 min-h-0 bg-cream">
+          <div className="flex h-full min-h-0 flex-col px-5 py-6 md:px-10 md:py-10">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <Badge variant="amber">
@@ -319,43 +319,55 @@ export default function TestTakingPage({ params }: Props) {
               </div>
             </div>
 
-            <div ref={contentRef} className="mt-8">
-              <div className="font-serif text-3xl leading-snug text-charcoal">{question.prompt}</div>
+            <div className="flex-1 min-h-0 overflow-y-auto pt-8">
+              <div ref={contentRef}>
+                <div className="font-serif text-3xl leading-snug text-charcoal">{question.prompt}</div>
 
-              <div className="mt-6">
-                <QuestionRenderer question={question} value={currentAnswer} onChange={handleAnswerChange} />
+                <div className="mt-6">
+                  <QuestionRenderer
+                    question={question}
+                    value={currentAnswer}
+                    onChange={handleAnswerChange}
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="mt-auto flex items-center justify-between gap-3 pt-10">
-              <Button
-                variant="secondary"
-                onClick={() => navigateToQuestion(Math.max(0, currentIndex - 1))}
-                disabled={currentIndex === 0}
-              >
-                ← Prev
-              </Button>
+            <div className="pt-6 md:pt-10">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <Button
+                  variant="secondary"
+                  className="w-full sm:w-auto"
+                  onClick={() => navigateToQuestion(Math.max(0, currentIndex - 1))}
+                  disabled={currentIndex === 0}
+                >
+                  ← Prev
+                </Button>
 
-              <button
-                type="button"
-                onClick={() => toggleFlag(question.id)}
-                className={
-                  'rounded-full px-5 py-3 text-sm card-edge transition-colors ' +
-                  (flaggedQuestionIds.includes(question.id)
-                    ? 'bg-amber/10 text-amber'
-                    : 'bg-cream text-muted hover:bg-charcoal/5')
-                }
-              >
-                Flag Question
-              </button>
+                <button
+                  type="button"
+                  onClick={() => toggleFlag(question.id)}
+                  className={
+                    'w-full sm:w-auto text-center rounded-full px-5 py-3 text-sm card-edge transition-colors ' +
+                    (flaggedQuestionIds.includes(question.id)
+                      ? 'bg-amber/10 text-amber'
+                      : 'bg-cream text-muted hover:bg-charcoal/5')
+                  }
+                >
+                  Flag Question
+                </button>
 
-              <Button
-                variant="secondary"
-                onClick={() => navigateToQuestion(Math.min(test.questions.length - 1, currentIndex + 1))}
-                disabled={currentIndex === test.questions.length - 1}
-              >
-                Next →
-              </Button>
+                <Button
+                  variant="secondary"
+                  className="w-full sm:w-auto"
+                  onClick={() =>
+                    navigateToQuestion(Math.min(test.questions.length - 1, currentIndex + 1))
+                  }
+                  disabled={currentIndex === test.questions.length - 1}
+                >
+                  Next →
+                </Button>
+              </div>
             </div>
           </div>
         </section>

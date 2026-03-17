@@ -410,7 +410,7 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="bg-cream">
+      <section className="bg-cream overflow-hidden">
         <div className="mx-auto max-w-6xl px-5 py-16 md:py-20">
           <div className="text-xs uppercase tracking-widest text-muted">Testimonials</div>
           <h2 className="mt-4 font-serif text-5xl leading-[0.98]">Loved by Students & Educators</h2>
