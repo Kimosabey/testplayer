@@ -379,7 +379,177 @@ const t2: Test = {
   ]
 }
 
-export const mockTests: Test[] = [t1, t2]
+const t3: Test = {
+  id: 'math-12-01',
+  title: 'Class 12 Mathematics — Calculus & Algebra Set',
+  description:
+    'Board-exam style questions from Class 12 mathematics: limits, derivatives, integrals, matrices, vectors, probability, and differential equations.',
+  duration: 30 * 60,
+  totalMarks: 23,
+  passingMarks: 14,
+  tags: ['Mathematics', 'Class 12', 'Calculus', 'Algebra'],
+  difficulty: 'Hard',
+  questions: [
+    {
+      id: 't3-q1',
+      type: 'MCQ',
+      prompt: 'Evaluate the limit: limₓ→0 (sin x) / x',
+      options: [
+        { id: 'a', label: '0' },
+        { id: 'b', label: '1' },
+        { id: 'c', label: '∞' },
+        { id: 'd', label: 'Does not exist' }
+      ],
+      correctAnswer: 'b',
+      explanation:
+        'A standard limit in calculus: limₓ→0 (sin x)/x = 1 (when x is in radians). It follows from the squeeze theorem or the small-angle approximation sin x ~ x.',
+      marks: 2,
+      negativeMarks: 0.5,
+      tags: ['Calculus', 'Limits']
+    },
+    {
+      id: 't3-q2',
+      type: 'INPUT',
+      prompt: 'If f(x) = x³ − 3x, find f′(2).',
+      correctAnswer: '9',
+      explanation:
+        'Differentiate: f′(x) = 3x² − 3. Then f′(2) = 3·(2²) − 3 = 12 − 3 = 9.',
+      marks: 2,
+      negativeMarks: 0.5,
+      tags: ['Calculus', 'Derivatives']
+    },
+    {
+      id: 't3-q3',
+      type: 'INPUT',
+      prompt: 'Evaluate the definite integral: ∫₀^π sin x dx',
+      correctAnswer: '2',
+      explanation:
+        '∫ sin x dx = −cos x + C. So ∫₀^π sin x dx = [−cos x]₀^π = (−cos π) − (−cos 0) = 1 − (−1) = 2.',
+      marks: 3,
+      negativeMarks: 1,
+      tags: ['Calculus', 'Integrals']
+    },
+    {
+      id: 't3-q4',
+      type: 'MCQ',
+      prompt: 'Find det(A) for A = [[1, 2], [3, 4]].',
+      options: [
+        { id: 'a', label: '−2' },
+        { id: 'b', label: '2' },
+        { id: 'c', label: '−10' },
+        { id: 'd', label: '10' }
+      ],
+      correctAnswer: 'a',
+      explanation:
+        'For a 2×2 matrix [[a,b],[c,d]], det = ad − bc. Here det = 1·4 − 2·3 = 4 − 6 = −2.',
+      marks: 2,
+      negativeMarks: 0.5,
+      tags: ['Algebra', 'Matrices']
+    },
+    {
+      id: 't3-q5',
+      type: 'MCQ',
+      prompt: 'For the complex number z = 3 − 4i, what is |z|?',
+      options: [
+        { id: 'a', label: '1' },
+        { id: 'b', label: '5' },
+        { id: 'c', label: '7' },
+        { id: 'd', label: '√7' }
+      ],
+      correctAnswer: 'b',
+      explanation:
+        '|a+bi| = √(a² + b²). So |3−4i| = √(3² + (−4)²) = √(9 + 16) = √25 = 5.',
+      marks: 2,
+      negativeMarks: 0.5,
+      tags: ['Algebra', 'Complex Numbers']
+    },
+    {
+      id: 't3-q6',
+      type: 'INPUT',
+      prompt:
+        'Let a = (1, 0, 0) and b = (1, 1, 0). Find cos(θ), where θ is the angle between a and b. (Enter a decimal.)',
+      correctAnswer: '0.7071',
+      explanation:
+        'cos θ = (a·b)/(|a||b|). Here a·b = 1·1 + 0·1 + 0·0 = 1. |a| = 1. |b| = √(1²+1²+0²)=√2. So cos θ = 1/√2 ≈ 0.7071.',
+      marks: 2,
+      negativeMarks: 0.5,
+      tags: ['Vectors']
+    },
+    {
+      id: 't3-q7',
+      type: 'MCQ',
+      prompt:
+        'A fair coin is tossed 4 times. What is the probability of getting exactly 2 heads?',
+      options: [
+        { id: 'a', label: '1/4' },
+        { id: 'b', label: '3/8' },
+        { id: 'c', label: '1/2' },
+        { id: 'd', label: '5/8' }
+      ],
+      correctAnswer: 'b',
+      explanation:
+        'Use the binomial probability: P(X=2) = C(4,2)(1/2)^2(1/2)^2 = 6/16 = 3/8.',
+      marks: 2,
+      negativeMarks: 0.5,
+      tags: ['Probability', 'Binomial Theorem']
+    },
+    {
+      id: 't3-q8',
+      type: 'MRQ',
+      prompt: 'Select all pairs of vectors that are perpendicular (dot product = 0).',
+      options: [
+        { id: 'a', label: '(1, 2, 3) and (4, −2, 0)' },
+        { id: 'b', label: '(2, 0, 1) and (1, 2, 3)' },
+        { id: 'c', label: '(1, −1, 0) and (2, 2, 0)' },
+        { id: 'd', label: '(0, 1, 1) and (1, 1, 1)' },
+        { id: 'e', label: '(3, 1, 0) and (1, 3, 0)' }
+      ],
+      correctAnswer: ['a', 'c'],
+      explanation:
+        'Compute dot products:\n(a) 1·4 + 2·(−2) + 3·0 = 4 − 4 + 0 = 0 ✓\n(b) 2·1 + 0·2 + 1·3 = 5 ✗\n(c) 1·2 + (−1)·2 + 0·0 = 0 ✓\n(d) 0·1 + 1·1 + 1·1 = 2 ✗\n(e) 3·1 + 1·3 + 0 = 6 ✗',
+      marks: 3,
+      negativeMarks: 1,
+      tags: ['Vectors']
+    },
+    {
+      id: 't3-q9',
+      type: 'MRQ',
+      prompt: 'Which properties of definite integrals are always true? (Select all that apply.)',
+      options: [
+        { id: 'a', label: '∫ₐ^ₐ f(x) dx = 0' },
+        { id: 'b', label: '∫ₐ^ᵇ f(x) dx = −∫ᵇ^ₐ f(x) dx' },
+        { id: 'c', label: '∫ₐ^ᵇ (f(x)+g(x)) dx = ∫ₐ^ᵇ f(x) dx + ∫ₐ^ᵇ g(x) dx' },
+        { id: 'd', label: '∫ₐ^ᵇ c·f(x) dx = c + ∫ₐ^ᵇ f(x) dx' }
+      ],
+      correctAnswer: ['a', 'b', 'c'],
+      explanation:
+        '(a) True by definition: no interval length, area is 0.\n(b) Reversing bounds changes sign.\n(c) Linearity holds for integrals.\n(d) Incorrect: constants factor out multiplicatively: ∫ c f = c ∫ f (not c + ∫ f).',
+      marks: 3,
+      negativeMarks: 1,
+      tags: ['Calculus', 'Integrals']
+    },
+    {
+      id: 't3-q10',
+      type: 'MCQ',
+      prompt: 'Solve the differential equation: dy/dx = 3x².',
+      options: [
+        { id: 'a', label: 'y = 3x + C' },
+        { id: 'b', label: 'y = x³ + C' },
+        { id: 'c', label: 'y = x² + C' },
+        { id: 'd', label: 'y = 3x² + C' }
+      ],
+      correctAnswer: 'b',
+      explanation:
+        'Integrate both sides: dy = 3x² dx ⇒ y = ∫ 3x² dx = x³ + C.',
+      marks: 2,
+      negativeMarks: 0.5,
+      tags: ['Calculus', 'Differential Equations']
+    }
+  ]
+}
+
+
+export const mockTests: Test[] = [t1, t2, t3]
 
 export function getMockTestById(id: string): Test | undefined {
   return mockTests.find((t) => t.id === id)
