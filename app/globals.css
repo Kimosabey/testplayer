@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --noise-opacity: 0.04;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: theme(colors.cream);
+  color: theme(colors.charcoal);
+  font-family: theme(fontFamily.sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: var(--noise-opacity);
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+}
+
+#__next,
+main {
+  position: relative;
+  z-index: 1;
+}
+
+::selection {
+  background: rgba(224, 123, 57, 0.35);
+}
+
+@layer utilities {
+  .bg-dark-glow {
+    background: radial-gradient(ellipse 80% 60% at 50% -10%, #3d2010 0%, #111010 60%);
+  }
+
+  .card-edge {
+    border: 1px solid rgba(26, 26, 26, 0.08);
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+}
