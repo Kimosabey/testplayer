@@ -41,6 +41,8 @@ export default function TestTakingPage({ params }: Props) {
 
   const [secondsRemaining, setSecondsRemaining] = useState<number>(0)
   const [submitOpen, setSubmitOpen] = useState(false)
+  const [navOpen, setNavOpen] = useState(false)
+
 
   const contentRef = useRef<HTMLDivElement | null>(null)
   const questionEnteredAtRef = useRef<number>(Date.now())
@@ -240,17 +242,143 @@ export default function TestTakingPage({ params }: Props) {
       />
 
       <div className="flex h-full min-h-0 flex-col md:flex-row">
-        <aside className="bg-dark bg-dark-glow text-white md:w-[30%] md:shrink-0 max-h-[44dvh] overflow-y-auto md:max-h-none md:overflow-y-visible">
+        {/* Mobile top bar */}
+        <div className="md:hidden bg-dark bg-dark-glow text-white border-b border-white/10">
+          <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
+            <div className="min-w-0">
+              <div className="truncate font-serif text-lg leading-tight text-white">{test.title}</div>
+              <div className="mt-2 flex items-center gap-2">
+                <Badge variant="dark">
+                  Q{currentIndex + 1}/{test.questions.length}
+                </Badge>
+                <Timer
+                  secondsRemaining={secondsRemaining}
+                  durationSeconds={test.duration}
+                  className="text-2xl"
+                />
+              </div>
+            </div>
+
+            <div className="flex shrink-0 items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setNavOpen(true)}
+                className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-semibold tracking-widest text-white/85"
+              >
+                QUESTIONS
+              </button>
+              <Button
+                variant={hasAnyAnswer ? 'danger' : 'secondary'}
+                size="sm"
+                disabled={!hasAnyAnswer}
+                onClick={() => setSubmitOpen(true)}
+                className="border border-white/15 text-white/90 hover:bg-white/10 disabled:opacity-40"
+              >
+                Submit
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile question drawer */}
+        <div
+          className={
+            'md:hidden fixed inset-0 z-[90] ' +
+            (navOpen ? 'pointer-events-auto' : 'pointer-events-none')
+          }
+        >
+          <button
+            type="button"
+            aria-label="Close question navigator"
+            onClick={() => setNavOpen(false)}
+            className={
+              'absolute inset-0 bg-dark/60 transition-opacity duration-200 ' +
+              (navOpen ? 'opacity-100' : 'opacity-0')
+            }
+          />
+          <div
+            className={
+              'absolute bottom-0 left-0 right-0 max-h-[78dvh] overflow-y-auto no-scrollbar rounded-t-3xl bg-dark bg-dark-glow border-t border-white/10 p-5 transition-transform duration-300 ' +
+              (navOpen ? 'translate-y-0' : 'translate-y-full')
+            }
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <div className="font-serif text-2xl text-white">Questions</div>
+                <div className="mt-2 text-xs uppercase tracking-widest text-white/60">
+                  Answered {attempt.answers.filter((a) => isAnswered(a.answer)).length} · Unanswered {unansweredCount}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setNavOpen(false)}
+                className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-semibold tracking-widest text-white/85"
+              >
+                CLOSE
+              </button>
+            </div>
+
+            <div className="mt-6 grid grid-cols-5 gap-2">
+              {test.questions.map((q, idx) => {
+                const ans = attempt.answers.find((a) => a.questionId === q.id)?.answer ?? null
+                const answered = isAnswered(ans)
+                const flagged = flaggedQuestionIds.includes(q.id)
+                const current = idx === currentIndex
+
+                const base =
+                  'relative flex h-11 w-11 items-center justify-center rounded-xl text-xs font-semibold transition-colors'
+
+                let cls = 'border border-white/15 text-white/70 hover:bg-white/5'
+                if (answered) cls = 'border border-amber/40 bg-amber text-dark'
+                if (flagged) cls = 'border border-amber/40 text-amber hover:bg-amber/10'
+                if (current) cls = 'bg-charcoal text-cream'
+
+                return (
+                  <button
+                    key={q.id}
+                    type="button"
+                    className={`${base} ${cls}`}
+                    onClick={() => {
+                      navigateToQuestion(idx)
+                      setNavOpen(false)
+                    }}
+                    aria-label={`Go to question ${idx + 1}`}
+                  >
+                    {idx + 1}
+                    {flagged ? (
+                      <span className="absolute -right-1 -top-1 rounded-full bg-amber px-1.5 py-0.5 text-[10px] font-bold text-dark">
+                        !
+                      </span>
+                    ) : null}
+                  </button>
+                )
+              })}
+            </div>
+
+            <div className="mt-6">
+              <Button
+                variant={hasAnyAnswer ? 'danger' : 'secondary'}
+                className="w-full border border-white/15 text-white/90 hover:bg-white/10 disabled:opacity-40"
+                disabled={!hasAnyAnswer}
+                onClick={() => {
+                  setNavOpen(false)
+                  setSubmitOpen(true)
+                }}
+              >
+                Submit Test
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop left panel */}
+        <aside className="hidden md:block bg-dark bg-dark-glow text-white md:w-[30%] md:shrink-0 overflow-y-auto no-scrollbar">
           <div className="flex h-full min-h-0 flex-col p-6">
             <div>
               <div className="font-serif text-2xl leading-tight text-white">{test.title}</div>
               <div className="mt-4">
                 <div className="text-xs uppercase tracking-widest text-white/60">Time left</div>
-                <Timer
-                  secondsRemaining={secondsRemaining}
-                  durationSeconds={test.duration}
-                  className="mt-2"
-                />
+                <Timer secondsRemaining={secondsRemaining} durationSeconds={test.duration} className="mt-2" />
               </div>
             </div>
 
@@ -319,53 +447,53 @@ export default function TestTakingPage({ params }: Props) {
               </div>
             </div>
 
-            <div className="flex-1 min-h-0 overflow-y-auto pt-8">
+            <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar pt-6 md:pt-8">
               <div ref={contentRef}>
-                <div className="font-serif text-3xl leading-snug text-charcoal">{question.prompt}</div>
+                <div className="font-serif text-2xl leading-snug text-charcoal sm:text-3xl">
+                  {question.prompt}
+                </div>
 
                 <div className="mt-6">
-                  <QuestionRenderer
-                    question={question}
-                    value={currentAnswer}
-                    onChange={handleAnswerChange}
-                  />
+                  <QuestionRenderer question={question} value={currentAnswer} onChange={handleAnswerChange} />
                 </div>
               </div>
             </div>
 
-            <div className="pt-6 md:pt-10">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="pt-5 md:pt-10">
+              <div className="grid grid-cols-3 gap-3 md:flex md:items-center md:justify-between">
                 <Button
                   variant="secondary"
-                  className="w-full sm:w-auto"
+                  size="sm"
+                  className="w-full md:w-auto"
                   onClick={() => navigateToQuestion(Math.max(0, currentIndex - 1))}
                   disabled={currentIndex === 0}
                 >
-                  ← Prev
+                  Prev
                 </Button>
 
                 <button
                   type="button"
                   onClick={() => toggleFlag(question.id)}
                   className={
-                    'w-full sm:w-auto text-center rounded-full px-5 py-3 text-sm card-edge transition-colors ' +
+                    'w-full text-center rounded-full px-4 py-2 text-sm card-edge transition-colors md:w-auto md:px-5 md:py-3 ' +
                     (flaggedQuestionIds.includes(question.id)
                       ? 'bg-amber/10 text-amber'
                       : 'bg-cream text-muted hover:bg-charcoal/5')
                   }
                 >
-                  Flag Question
+                  Flag
                 </button>
 
                 <Button
                   variant="secondary"
-                  className="w-full sm:w-auto"
+                  size="sm"
+                  className="w-full md:w-auto"
                   onClick={() =>
                     navigateToQuestion(Math.min(test.questions.length - 1, currentIndex + 1))
                   }
                   disabled={currentIndex === test.questions.length - 1}
                 >
-                  Next →
+                  Next
                 </Button>
               </div>
             </div>
