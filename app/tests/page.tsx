@@ -148,7 +148,7 @@ export default function TestsPage() {
                 ) : null}
               </div>
 
-              <div className="mt-6 grid grid-cols-3 gap-3 text-xs text-muted">
+              <div className="mt-6 grid grid-cols-2 gap-3 text-xs text-muted sm:grid-cols-3">
                 <div className="rounded-2xl bg-charcoal/5 px-4 py-3">
                   <div className="text-charcoal">Questions</div>
                   <div className="mt-1 text-sm text-charcoal">{test.questions.length}</div>
